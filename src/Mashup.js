@@ -28,13 +28,13 @@ export default class Mashup extends React.Component {
 
         };
 
-        $(document.body).on('click', '.cu-quickaddcomment-trigger', this.clickListener);
+        $(document.body).on('click', '.i-role-card .cu-quickaddcomment-trigger', this.clickListener);
 
     }
 
     componentWillUnmount() {
 
-        $(document.body).off('click', '.cu-quickaddcomment-trigger', this.clickListener);
+        $(document.body).off('click', '.i-role-card .cu-quickaddcomment-trigger', this.clickListener);
 
     }
 
