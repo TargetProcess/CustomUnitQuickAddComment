@@ -1,0 +1,42 @@
+{
+  "name": "CustomUnitQuickAddComment",
+  "version": "0.1.0",
+  "description": "Custom unit to quick add comment on entity.",
+  "keywords": [
+    "webpack",
+    "targetprocess",
+    "mashup"
+  ],
+  "author": "Aliaksei Shytkin <shitkin@targetprocess.com>",
+  "scripts": {
+    "develop": "webpack --output-path $TARGETPROCESS_MASHUPS_PATH/CustomUnitQuickAddComment --watch",
+    "build-production": "rm -rf dist && webpack --output-path dist --config webpack-production.config.js",
+    "build-library": "rm -rf library && webpack --output-path library --config webpack-library.config.js && cp src/README.mkd library"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://www.opensource.org/licenses/mit-license.php"
+    }
+  ],
+  "devDependencies": {
+    "babel-eslint": "^4.0.5",
+    "babel-loader": "^5.1.3",
+    "babel-plugin-react-autoprefix": "^0.2.2",
+    "combine-assets-plugin": "targetprocess/combine-assets-plugin",
+    "css-loader": "^0.14.5",
+    "eslint": "^1.0.0",
+    "eslint-plugin-arrow-function": "^1.0.0",
+    "eslint-plugin-react": "^3.1.0",
+    "file-loader": "^0.8.4",
+    "html-loader": "^0.3.0",
+    "style-loader": "^0.12.3",
+    "targetprocess-mashup-config-loader": "targetprocess/targetprocess-mashup-config-loader",
+    "targetprocess-mashup-manifest-loader": "targetprocess/targetprocess-mashup-manifest-loader",
+    "targetprocess-mashup-webpack-plugin": "targetprocess/targetprocess-mashup-webpack-plugin",
+    "webpack": "^1.9.10"
+  },
+  "dependencies": {
+    "targetprocess-mashup-helper": "^0.1.0"
+  }
+}
