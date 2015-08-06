@@ -11,7 +11,7 @@
   "scripts": {
     "develop": "webpack --output-path $TARGETPROCESS_MASHUPS_PATH/CustomUnitQuickAddComment --watch",
     "build-production": "rm -rf dist && webpack --output-path dist --config webpack-production.config.js",
-    "build-library": "rm -rf library && webpack --output-path library --config webpack-library.config.js && cp src/README.mkd library"
+    "build-library": "rm -rf library && webpack --output-path library --config webpack-library.config.js && cp src/README.mkd library && cp src/*.png library"
   },
   "licenses": [
     {
