@@ -23,7 +23,7 @@ const processReadme = (publishName) => {
 
     shell.mkdir('-p', 'build/library');
     shell.cp('-fR', 'docs/*', 'build/library/');
-    processReadmeText(cat(file), publishName).to('build/library/README.mkd');
+    processReadmeText(shell.cat(file), publishName).to('build/library/README.mkd');
     shell.rm('-rf', 'build/library/README.md');
 };
 
