@@ -1,15 +1,14 @@
 import React from 'react';
-
-import {customUnits as cu} from 'targetprocess-mashup-helper';
+import ReactDOM from 'react-dom';
+import Mashup from './Mashup';
+import {customUnits} from 'targetprocess-mashup-helper';
 import template from './template.html';
 
-cu.add({
+customUnits.add({
     id: 'add_comment',
     name: 'Add Comment',
     template: template,
-    sizes: [cu.sizes.LIST]
+    sizes: [customUnits.sizes.LIST]
 });
 
-import Mashup from './Mashup';
-
-React.render(<Mashup />, document.querySelector('#RestUI_Board'));
+ReactDOM.render(<Mashup />, document.getElementById('RestUI_Board'));

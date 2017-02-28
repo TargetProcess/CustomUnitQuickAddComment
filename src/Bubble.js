@@ -1,8 +1,14 @@
 import React, {PropTypes} from 'react';
+import ReactDOM from 'react-dom';
 import $ from 'jquery';
 
-export default class Bubble extends React.Component {
+function doWithTauBubble($target, method) {
+    if ($target.tauBubble('instance')) {
+        $target.tauBubble(method);
+    }
+}
 
+export default class Bubble extends React.Component {
     static propTypes = {
         onOuterClick: PropTypes.func.isRequired,
         overlay: PropTypes.node.isRequired,
@@ -10,56 +16,45 @@ export default class Bubble extends React.Component {
     }
 
     componentDidMount() {
-
-        this.span = $('<span />').appendTo('body')[0];
-
+        this.content = document.createElement('div');
         this.renderBubble(this.props.target, this.props.overlay);
-
-        this.documentListener = ::this.handleClickDocument;
+        this.documentListener = ::this.handleDocumentClick;
         document.body.addEventListener('click', this.documentListener);
-
-    }
-
-    componentWillUnmount() {
-
-        $(this.props.target).tauBubble('destroy');
-        document.body.removeEventListener('click', this.documentListener);
-
     }
 
     componentWillReceiveProps(nextProps) {
-
         const {target: prevTarget} = this.props;
         const {target: nextTarget} = nextProps;
 
         if (prevTarget !== nextTarget) {
-
-            if ($(prevTarget).tauBubble('instance')) {
-
-                $(prevTarget).tauBubble('destroy');
-
-            }
-
+            doWithTauBubble($(prevTarget), 'destroy');
             this.renderBubble(nextTarget, nextProps.overlay);
-
         }
-
     }
 
-    render() {
-
-        return null;
-
+    componentWillUnmount() {
+        doWithTauBubble($(this.props.target), 'destroy');
+        document.body.removeEventListener('click', this.documentListener);
     }
 
     renderBubble(target, overlay) {
+        /*
+         https://facebook.github.io/react/docs/react-dom.html#render
+         https://facebook.github.io/react/docs/refs-and-the-dom.html#adding-a-ref-to-a-dom-element
 
-        this.bubble = React.render(overlay, this.span).getDOMNode();
+         ReactDOM.render() currently returns a reference to the root ReactComponent instance. However, using this return
+         value is legacy and should be avoided because future versions of React may render components asynchronously in
+         some cases. If you need a reference to the root ReactComponent instance, the preferred solution is to attach a
+         callback ref to the root element.
+         */
 
-        $(target)
+        this.bubble = ReactDOM.render(overlay, this.content);
+
+        const $target = $(target);
+        $target
             .tauBubble({
                 target: target,
-                content: this.span,
+                content: this.content,
                 showOnCreation: true,
                 showEvent: 'none',
                 hideEvent: 'none',
@@ -69,37 +64,28 @@ export default class Bubble extends React.Component {
             });
 
         setTimeout(() => {
-
-            if ($(target).tauBubble('instance')) {
-
-                $(target).tauBubble('adjustPosition');
-
-            }
-
+            doWithTauBubble($target, 'adjustPosition');
         }, 50);
 
         setTimeout(() => {
-
-            if ($(target).tauBubble('instance')) {
-
-                $(target).tauBubble('adjustPosition');
-
-            }
-
+            doWithTauBubble($target, 'adjustPosition');
         }, 100);
-
     }
 
-    handleClickDocument = (e) => {
-
-        const {target} = this.props;
-
-        if (e.target !== React.findDOMNode(target) && !React.findDOMNode(target).contains(e.target)
-            && e.target !== this.bubble && !this.bubble.contains(e.target)) {
-
-            this.props.onOuterClick();
-
+    handleDocumentClick = (e) => {
+        if (e.target === this.bubble || this.bubble.contains(e.target)) {
+            return;
         }
 
+        const targetReactNode = ReactDOM.findDOMNode(this.props.target);
+        if (e.target === targetReactNode || targetReactNode.contains(e.target)) {
+            return;
+        }
+
+        this.props.onOuterClick();
+    }
+
+    render() {
+        return null;
     }
 }
