@@ -1,43 +1,54 @@
 {
   "name": "CustomUnitQuickAddComment",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Custom unit to quick add comment on entity.",
   "keywords": [
     "webpack",
     "targetprocess",
     "mashup"
   ],
-  "author": "Aliaksei Shytkin <shitkin@targetprocess.com>",
   "scripts": {
-    "develop": "webpack --output-path $TARGETPROCESS_MASHUPS_PATH/CustomUnitQuickAddComment --watch",
-    "build-production": "rm -rf dist && webpack --output-path dist --config webpack-production.config.js",
-    "build-library": "rm -rf library && webpack --output-path library --config webpack-library.config.js && cp src/README.mkd library && cp src/*.png library"
+    "start": "node scripts/startWatcher.js",
+    "build:development": "shx rm -rf build/development && cross-env NODE_ENV=development webpack --config webpack/development.config.js --output-path build/development",
+    "build:library:docs": "shjs scripts/buildLibraryDocs.js",
+    "build:library": "shx rm -rf build/library && cross-env NODE_ENV=production webpack --config webpack/library.config.js --output-path build/library --progress && npm run build:library:docs",
+    "build:manager": "shx rm -rf build/manager && cross-env NODE_ENV=production webpack --config webpack/manager.config.js --output-path build/manager --progress && cd build/manager && shx cat mashup.config.js > tmp.js && shx echo >> tmp.js && shx cat index.js >> tmp.js && shx rm mashup.config.js index.js && shx mv tmp.js index.js",
+    "build:all": "npm run build:library && npm run build:manager",
+    "lint": "eslint ./src",
+    "preversion": "npm test",
+    "version": "npm run build:all && git add -A build",
+    "postversion": "git push && git push --tags"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "http://www.opensource.org/licenses/mit-license.php"
-    }
-  ],
   "devDependencies": {
-    "babel-eslint": "^4.0.5",
-    "babel-loader": "^5.1.3",
-    "babel-plugin-react-autoprefix": "^0.2.2",
-    "combine-assets-plugin": "targetprocess/combine-assets-plugin",
-    "css-loader": "^0.14.5",
-    "eslint": "^1.0.0",
-    "eslint-plugin-arrow-function": "^1.0.0",
-    "eslint-plugin-react": "^3.1.0",
-    "file-loader": "^0.8.4",
+    "autoprefixer": "^6.3.1",
+    "babel-core": "^6.23.1",
+    "babel-eslint": "^6.1.2",
+    "babel-loader": "^6.2.2",
+    "babel-plugin-react-autoprefix": "^1.0.1",
+    "babel-preset-es2015": "^6.3.13",
+    "babel-preset-react": "^6.3.13",
+    "babel-preset-stage-0": "^6.3.13",
+    "cross-env": "^3.1.4",
+    "css-loader": "^0.23.1",
+    "eslint": "3.7.0",
+    "eslint-plugin-react": "6.3.0",
+    "file-loader": "^0.8.5",
     "html-loader": "^0.3.0",
-    "style-loader": "^0.12.3",
-    "targetprocess-mashup-config-loader": "targetprocess/targetprocess-mashup-config-loader",
+    "postcss-loader": "^0.8.0",
+    "shelljs": "^0.7.6",
+    "shx": "^0.2.2",
+    "style-loader": "^0.13.0",
     "targetprocess-mashup-helper": "^0.4.0",
-    "targetprocess-mashup-manifest-loader": "targetprocess/targetprocess-mashup-manifest-loader",
-    "targetprocess-mashup-webpack-plugin": "targetprocess/targetprocess-mashup-webpack-plugin",
-    "webpack": "^1.9.10"
+    "targetprocess-mashup-webpack-plugin": "^1.0.0",
+    "tmp": "0.0.28",
+    "webpack": "^1.12.12"
   },
   "dependencies": {
-    "targetprocess-mashup-helper": "^0.1.0"
-  }
+    "targetprocess-mashup-helper": "^0.4.0"
+  },
+  "author": "Targetprocess <dev@targetprocess.com>",
+  "license": "MIT",
+  "contributors": [
+    "Aliaksei Shytkin <shitkin@targetprocess.com>"
+  ]
 }

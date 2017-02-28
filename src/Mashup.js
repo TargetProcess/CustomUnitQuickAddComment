@@ -1,10 +1,9 @@
 import React from 'react';
 import $ from 'jquery';
-
 import configurator from 'tau/configurator';
-const appPath = configurator.getApplicationPath();
-
 import Form from './Form';
+
+const appPath = configurator.getApplicationPath();
 
 export default class Mashup extends React.Component {
 
@@ -13,54 +12,26 @@ export default class Mashup extends React.Component {
     }
 
     componentDidMount() {
-
         this.clickListener = (e) => {
-
             e.stopPropagation();
 
-            const entityId = $(e.target).parents('.i-role-card').data('entityId');
+            const entityId = $(e.target).closest('.i-role-card').data('entityId');
 
             this.setState({
                 entityId,
-                isActive: (entityId !== this.state.entityId) ? true : !this.state.isActive,
+                isActive: (entityId === this.state.entityId) ? !this.state.isActive : true,
                 target: e.target
             });
-
         };
 
         $(document.body).on('click', '.i-role-card .cu-quickaddcomment-trigger', this.clickListener);
-
     }
 
     componentWillUnmount() {
-
         $(document.body).off('click', '.i-role-card .cu-quickaddcomment-trigger', this.clickListener);
-
-    }
-
-    render() {
-
-        const {isActive} = this.state;
-
-        if (!isActive) {
-
-            return null;
-
-        }
-
-        return (
-            <Form
-                key={this.state.entityId}
-                target={this.state.target}
-                onSubmit={this.handleSubmit}
-                onClose={this.handleClose}
-                onOuterClick={this.handleClose} />
-        );
-
     }
 
     handleSubmit = (value) => {
-
         this.setState({
             isActive: false
         });
@@ -77,14 +48,26 @@ export default class Mashup extends React.Component {
                 description: value
             })
         });
-
     }
 
     handleClose = () => {
-
         this.setState({
             isActive: false
         });
+    }
 
+    render() {
+        if (!this.state.isActive) {
+            return null;
+        }
+
+        return (
+            <Form
+                key={this.state.entityId}
+                target={this.state.target}
+                onSubmit={this.handleSubmit}
+                onClose={this.handleClose}
+                onOuterClick={this.handleClose} />
+        );
     }
 }

@@ -1,0 +1,22 @@
+:global .cu-quickaddcomment-trigger {
+    height: auto;
+    padding-bottom: 3px;
+}
+
+.formContainer {
+    background-color: white;
+    border-radius: 3px;
+    display: flex;
+    padding: 5px;
+}
+
+.textareaContainer {
+    margin-bottom: 5px;
+}
+
+.textarea {
+    font-size: 13px;
+    height: 200px;
+    overflow: auto;
+    width: 300px;
+}
