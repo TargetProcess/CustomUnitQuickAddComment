@@ -93,7 +93,12 @@ const createConfig = (options_) => {
     if (options.production) {
         config.plugins = config.plugins.concat(new webpack.optimize.UglifyJsPlugin({
             compress: {
+                properties: true,
+                screw_ie8: false,
                 warnings: false
+            },
+            output: {
+                screw_ie8: false
             }
         }));
     }
